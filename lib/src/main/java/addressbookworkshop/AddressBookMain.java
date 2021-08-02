@@ -6,7 +6,8 @@ public class AddressBookMain
 {
     static AddressBookService service = new AddressBookService();
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         boolean isExit = false;
         while (!isExit)
         {
