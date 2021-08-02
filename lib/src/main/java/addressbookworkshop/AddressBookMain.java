@@ -2,44 +2,35 @@ package addressbookworkshop;
 
 import java.util.Scanner;
 
-
 public class AddressBookMain 
 {
+    static AddressBookService service = new AddressBookService();
 
-    Contacts contacts;
-    private void addContacts() 
+    public static void main(String[] args)
     {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter The First Name: ");
-        String firstName = scanner.nextLine();
-        System.out.println("Enter The Last Name: ");
-        String lastName = scanner.nextLine();
-        System.out.println("Enter The Address: ");
-        String address = scanner.nextLine();
-        System.out.println("Enter The City: ");
-        String city = scanner.nextLine();
-        System.out.println("Enter The State: ");
-        String state = scanner.nextLine();
-        System.out.println("Enter The Zip Code: ");
-        int zipCode = scanner.nextInt();
-        System.out.println("Enter The Mobile Number: ");
-        String number = scanner.next();
-        System.out.println("Enter The Email-id: ");
-        String email = scanner.next();
-        contacts = new Contacts(firstName, lastName, address, state, city, zipCode, number, email);
-        System.out.println("Contact Successfully Added");
-    }
-    @Override
-    public String toString()
-    {
-        return contacts.toString();
-    }
-
-    public static void main(String[] args) 
-    {
-        System.out.println("Welcome to Address Book System");
-        AddressBookMain addressBook = new AddressBookMain();
-        addressBook.addContacts();
-        System.out.println(addressBook.toString());
+        boolean isExit = false;
+        while (!isExit)
+        {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter options \n 1.Add Contact.\n 2.Edit Contact.\n 3.Display Contact.\n 4.Exit.");
+            int userInput = scanner.nextInt();
+            switch (userInput)
+            {
+                case 1:
+                    service.addNewContact();
+                    break;
+                case 2:
+                    service.editContact();
+                    break;
+                case 3:
+                    service.displayList();
+                    break;
+                case 4:
+                    isExit = true;
+                    break;
+                default:
+                    System.out.println("Please enter valid input");
+            }
+        }
     }
 }
