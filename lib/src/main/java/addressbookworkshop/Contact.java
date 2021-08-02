@@ -9,7 +9,7 @@ public class Contact
     private String state;
     private String email;
     private String zip;
-    private String phoneNumber;
+    private long phoneNumber;
 
     public String getFirstName() {
         return firstName;
@@ -67,11 +67,11 @@ public class Contact
         this.zip = zip;
     }
 
-    public String getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(String phonenumber) {
         this.phoneNumber = phoneNumber;
     }
 
