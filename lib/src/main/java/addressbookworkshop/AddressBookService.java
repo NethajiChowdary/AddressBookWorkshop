@@ -466,4 +466,17 @@ public class AddressBookService
         }
         return addressBookList;
     }
+    public int readDataBasedOnCity(String total, String city) throws AddressBookException {
+        int count = 0;
+        String query = String.format("select %s(state) from address_book where city = '%s' group by city;", total, city);
+        try (Connection connection = addressBookConnection.getConnection()) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(query);
+            resultSet.next();
+            count = resultSet.getInt(1);
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
+        }
+        return count;
+    }
 }
