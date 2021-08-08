@@ -3,15 +3,18 @@ package addressbookworkshop;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 
 public class AddressBookService
 {
     public HashMap<Integer,Contact> contacts = new HashMap<>();
 
     static Scanner scanner = new Scanner(System.in);
-    ArrayList<Contact> contactlist = new ArrayList<>();
+    static ArrayList<Contact> contactlist = new ArrayList<>();
     private Map<String, ArrayList<Contact>> AddressBooks = new HashMap<>();
 
 
@@ -132,10 +135,27 @@ public class AddressBookService
         }
         System.out.println("Contact Deleted Successfully");
     }
+    public void searchPersonByCity (String city)
+    {
+        System.out.println("following are the persons who belongs to :" + city);
+        for(String bookName : AddressBooks.keySet())
+        {
+            AddressBooks.get(bookName);
+            contactlist.stream().filter(value -> value.getCity().equals(city)).map(Contact::getFirstName).forEach(System.out::println);
+        }
+    }
+    public void searchPersonByState (String state)
+    {
+        System.out.println("following are the persons who belongs to :" + state);
+        for(String bookName : AddressBooks.keySet())
+        {
+            AddressBooks.get(bookName);
+            contactlist.stream().filter(value -> value.getState().equals(state)).map(Contact::getFirstName).forEach(System.out::println);
+        }
+    }
     public void displayList() 
     {
         for (Contact iterator : contactlist) System.out.println(iterator);
     }
-    
     
 }

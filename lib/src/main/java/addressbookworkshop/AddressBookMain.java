@@ -12,7 +12,7 @@ public class AddressBookMain
         while (!isExit)
         {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("\nEnter options\n 1.Add Contact.\n 2.Edit Contact.\n 3.Delete Contact.\n 4.Display Contact.\n 5.Exit.");
+            System.out.println("\nEnter options\n 1.Add Contact.\n 2.Edit Contact.\n 3.Delete Contact.\n 4.Display Contact.\n 5.Search by City.\n 6.Search by State.\n 7.Exit.");
             int userInput = scanner.nextInt();
             switch (userInput)
             {
@@ -31,6 +31,15 @@ public class AddressBookMain
                     service.displayList();
                     break;
                 case 5:
+                    System.out.println("Enter City Name to search person by city:");
+                    String searchcity = scanner.next();
+                	service.searchPersonByCity(searchcity);
+                	
+                case 6:
+                    System.out.println("Enter State Name to search person by state :");
+                    String searchstate = scanner.next();
+                	service.searchPersonByState(searchstate);
+                case 7:
                     isExit = true;
                     break;
                 default:
