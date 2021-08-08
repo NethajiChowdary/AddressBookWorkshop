@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.*;
 
 
 public class AddressBookService
@@ -178,6 +179,14 @@ public class AddressBookService
     public void sortByFirstName() {
 		System.out.println(AddressBooks.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toList()));
 	}
+    public void sortByCity() {
+        AddressBooks.keySet().forEach((String key) -> {
+            AddressBooks.get(key).stream()
+                    .sorted(Comparator.comparing(Contact::getCity))
+                    .collect(Collectors.toList())
+                    .forEach(person -> System.out.println(person.toString()));
+        });
+    }
     public void displayList() 
     {
         for (Contact iterator : contactlist) System.out.println(iterator);
