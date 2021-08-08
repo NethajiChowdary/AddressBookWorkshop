@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 
@@ -17,6 +22,8 @@ public class AddressBookService
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<Contact> contactlist = new ArrayList<>();
     private Map<String, ArrayList<Contact>> AddressBooks = new HashMap<>();
+    public static String addressBookFile = "AddressBookFile.txt";
+
 
 
     public void addNewContact()
@@ -67,6 +74,32 @@ public class AddressBookService
             System.out.println("New book created and added Contact Added Successfully");
         }
 
+    }
+    public void writeToFile()
+    {
+        StringBuffer addressBuffer = new StringBuffer();
+        contactlist.forEach(address -> { String addressDataString = address.toString().concat("\n");addressBuffer.append(addressDataString);});
+        try
+        {
+            Files.write(Paths.get(addressBookFile),addressBuffer.toString().getBytes(StandardCharsets.UTF_8));
+            System.out.println("Data successfully written to file.");
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    public void readDataFromFile()
+    {
+        try
+        {
+            System.out.println("Reading Data From File :");
+            Files.lines(new File(addressBookFile).toPath()).map(line -> line.trim()).forEach(line -> System.out.println(line));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
    
     

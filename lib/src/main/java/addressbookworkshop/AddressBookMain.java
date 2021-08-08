@@ -12,7 +12,9 @@ public class AddressBookMain
         while (!isExit)
         {
             Scanner scanner = new Scanner(System.in);
-            System.out.println("\nEnter options\n 1.Add Contact.\n 2.Edit Contact.\n 3.Delete Contact.\n 4.Display Contact.\n 5.Search by City.\n 6.Search by State.\n 7.View by City.\n 8.View by State.\n 9.SortByName.\n 10.Sort By City\n 11.Exit.");
+            System.out.println("\nEnter options\n 1.Add Contact.\n 2.Edit Contact.\n 3.Delete Contact.\n 4.Display Contact."
+            		+ "\n 5.Search by City.\n 6.Search by State.\n 7.View by City.\n 8.View by State."
+            		+ "\n 9.Sort By Name.\n 10.Sort By City.\n 11.Read From File.\n 12.Write From File.\n 11.Exit.");
             int userInput = scanner.nextInt();
             switch (userInput)
             {
