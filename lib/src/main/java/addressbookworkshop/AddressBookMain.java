@@ -1,5 +1,6 @@
 package addressbookworkshop;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class AddressBookMain 
@@ -74,4 +75,12 @@ public class AddressBookMain
             }
         }
     }
+
+	public AddressBookMain getInstance() {
+		return null;
+	}
+
+	public List<Contact> readData() {
+		return null;
+	}
 }

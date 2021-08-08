@@ -27,6 +27,10 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.*;
 
 
@@ -360,5 +364,52 @@ public class AddressBookService
             e.printStackTrace();
         }
         return null;
+    }
+    private static AddressBookService addressBookDBService;
+
+   AddressBookService() {
+    }
+
+    public static AddressBookService getInstance() {
+        if (addressBookDBService == null)
+            addressBookDBService = new AddressBookService();
+        return addressBookDBService;
+    }
+
+    public List<Contact> readData() throws AddressBookException {
+        String sql = "SELECT * FROM address_book; ";
+        return this.getAddressBookDataUsingDB(sql);
+    }
+
+    private List<Contact> getAddressBookDataUsingDB(String sql) throws AddressBookException {
+        List<Contact> addressBookList = new ArrayList<>();
+        try (Connection connection = AddressBookConnection.getConnection();) {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+            addressBookList = this.getAddressBookData(resultSet);
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
+        }
+        return addressBookList;
+    }
+
+    private List<Contact> getAddressBookData(ResultSet resultSet) throws AddressBookException {
+        List<Contact> addressBookList = new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                String firstName = resultSet.getString("FirstName");
+                String lastName = resultSet.getString("LastName");
+                String address = resultSet.getString("Address");
+                String city = resultSet.getString("City");
+                String state = resultSet.getString("State");
+                String zip = resultSet.getString("Zip");
+                String phoneNo = resultSet.getString("Phone");
+                String email = resultSet.getString("Email");
+                addressBookList.add(new Contact());
+            }
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
+        }
+        return addressBookList;
     }
 }
