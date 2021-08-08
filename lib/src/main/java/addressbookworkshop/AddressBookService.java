@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -36,6 +37,8 @@ import java.util.*;
 
 public class AddressBookService
 {
+	private List<Contact> addressBookData;
+    private PreparedStatement addressBookPreparedStatement;
     public HashMap<Integer,Contact> contacts = new HashMap<>();
 
     static Scanner scanner = new Scanner(System.in);
@@ -411,5 +414,39 @@ public class AddressBookService
             throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
         }
         return addressBookList;
+    }
+    AddressBookConnection addressBookConnection = new AddressBookConnection();
+    private void prepareAddressBookStatement() throws AddressBookException {
+        try {
+            Connection connection = addressBookConnection.getConnection();
+            String query = "select * from address_book where FirstName = ?";
+            addressBookPreparedStatement = connection.prepareStatement(query);
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
+        }
+    }
+    public int updateAddressBookData(String firstname, String address) throws AddressBookException {
+        String query = String.format("update address_book set Address = '%s' where FirstName = '%s';", address,
+                firstname);
+        try (Connection connection = addressBookConnection.getConnection()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            return preparedStatement.executeUpdate(query);
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.CONNECTION_FAILED);
+        }
+    }
+
+    public List<Contact> getAddressBookData(String firstname) throws AddressBookException {
+        if (this.addressBookPreparedStatement == null)
+            this.prepareAddressBookStatement();
+        try {
+            addressBookPreparedStatement.setString(1, firstname);
+            ResultSet resultSet = addressBookPreparedStatement.executeQuery();
+            addressBookData = this.getAddressBookData(resultSet);
+        } catch (SQLException e) {
+            throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.CONNECTION_FAILED);
+        }
+        System.out.println(addressBookData);
+        return addressBookData;
     }
 }
