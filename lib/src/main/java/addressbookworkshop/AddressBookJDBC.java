@@ -66,4 +66,9 @@ public class AddressBookJDBC {
     public int readAddressBookData(String function, String city) throws AddressBookException {
         return addressBookDBService.readDataBasedOnCity(function, city);
     }
+    public void addNewContact(String firstName, String lastName, String address, String city, String state, String zip,
+            String phone, String email,String AddressBookType, String date) throws AddressBookException {
+addressBookList.add(addressBookDBService.addNewContact(firstName, lastName, address, city, state, zip, phone,
+email,AddressBookType, date));
+}
 }

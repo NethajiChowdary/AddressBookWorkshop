@@ -29,4 +29,12 @@ public class AddressBookServiceTest
         AddressBookJDBC addressBookJDBC = new AddressBookJDBC();
         Assert.assertEquals(2, addressBookJDBC.readAddressBookData("count", "Hyderabad"));
     }
+    @Test
+    public void givenAddressBookDetails_WhenAdded_ShouldSyncWithDB() throws AddressBookException {
+        AddressBookJDBC addressBookJDBC = new AddressBookJDBC();
+        addressBookJDBC.readAddressBookData(AddressBookJDBC.IOService.DB_IO);
+        addressBookJDBC.addNewContact("Dinesh", "Chowdary", "KPHB", "Hyderabad", "Telangana", "511223", "9909947866", "dines@gmail.com","Friend", "2020-11-02");
+        boolean result = addressBookJDBC.checkUpdatedRecordSyncWithDatabase("Dinesh");
+        Assert.assertTrue(result);
+    }
 }

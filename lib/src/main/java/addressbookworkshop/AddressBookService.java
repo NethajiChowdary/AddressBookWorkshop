@@ -479,4 +479,24 @@ public class AddressBookService
         }
         return count;
     }
+    public Contact addNewContact(String firstName, String lastName, String address, String city, String state,
+            String zip, String phoneNo, String email,String AddressBookType, String date) throws AddressBookException {
+    	int id = -1;
+    	Contact addressBookData = null;
+    	String query = String.format("INSERT INTO address_book(FirstName, LastName, Address, City, State, Zip, Phone, Email, AddressBookType,Date) values ('%s','%s,'%s','%s','%s','%s','%s','%s','%s','%s');",
+    			firstName, lastName, address, city, state, zip, phoneNo, email,AddressBookType, date);
+    	try (Connection connection = addressBookConnection.getConnection()) {
+    		Statement statement = connection.createStatement();
+    		int rowChanged = statement.executeUpdate(query, statement.RETURN_GENERATED_KEYS);
+    		if (rowChanged == 1) {
+    			ResultSet resultSet = statement.getGeneratedKeys();
+    			if (resultSet.next())
+    				id = resultSet.getInt(1);
+    		}
+    		addressBookData = new Contact();
+    	} catch (SQLException e) {
+    		throw new AddressBookException(e.getMessage(), AddressBookException.ExceptionType.DATABASE_EXCEPTION);
+    	}
+    	return addressBookData;
+}
 }
