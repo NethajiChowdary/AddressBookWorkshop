@@ -1,5 +1,13 @@
 package addressbookworkshop;
 
+import com.opencsv.CSVWriter;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +17,8 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -22,8 +32,9 @@ public class AddressBookService
     static Scanner scanner = new Scanner(System.in);
     static ArrayList<Contact> contactlist = new ArrayList<>();
     private Map<String, ArrayList<Contact>> AddressBooks = new HashMap<>();
+    public static final String FILE_PATH="C:\\Users\\Admin\\Desktop";
     public static String addressBookFile = "AddressBookFile.txt";
-
+    public static final String CSV_FILE="/addressBook.csv";
 
 
     public void addNewContact()
@@ -223,6 +234,65 @@ public class AddressBookService
     public void displayList() 
     {
         for (Contact iterator : contactlist) System.out.println(iterator);
+    }
+    public void writeToCsv()
+    {
+        try
+        {
+            Writer writer = Files.newBufferedWriter(Paths.get(FILE_PATH+CSV_FILE));
+            StatefulBeanToCsv<Contact> beanToCsv = new StatefulBeanToCsvBuilder<Contact>(writer)
+                    .withQuotechar(CSVWriter.NO_QUOTE_CHARACTER)
+                    .build();
+            List<Contact> ContactList = new ArrayList<>();
+            AddressBooks.entrySet().stream()
+                    .map(books->books.getKey())
+                    .map(bookNames->{
+                        return AddressBooks.get(bookNames);
+                    }).forEach(contacts ->{
+                ContactList.addAll(contacts);
+            });
+            beanToCsv.write(ContactList);
+            writer.close();
+        }
+        catch (CsvDataTypeMismatchException e)
+        {
+            e.printStackTrace();
+        }
+        catch (CsvRequiredFieldEmptyException e)
+        {
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    public void readFromCsvFile()
+    {
+        Reader reader;
+        try {
+            reader = Files.newBufferedReader(Paths.get(FILE_PATH+CSV_FILE));
+            CsvToBean<Contact> csvToBean = new CsvToBeanBuilder(reader)
+                    .withType(Contact.class)
+                    .withIgnoreLeadingWhiteSpace(true)
+                    .build();
+            List<Contact> contacts = csvToBean.parse();
+
+            for(Contact contact: contacts) {
+                System.out.println("Name : " + contact.getFirstName()+" "+contact.getLastName());
+                System.out.println("Email : " + contact.getEmail());
+                System.out.println("PhoneNo : " + contact.getPhoneNumber());
+                System.out.println("Address : " + contact.getAddress());
+                System.out.println("State : " + contact.getState());
+                System.out.println("City : " + contact.getCity());
+                System.out.println("Zip : " + contact.getZip());
+                System.out.println("==========================");
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
     
 }
