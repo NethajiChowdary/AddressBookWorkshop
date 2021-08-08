@@ -153,6 +153,28 @@ public class AddressBookService
             contactlist.stream().filter(value -> value.getState().equals(state)).map(Contact::getFirstName).forEach(System.out::println);
         }
     }
+    public void viewPersonByCity (String city)
+    {
+        for(String bookName : AddressBooks.keySet())
+        {
+            int countPerson = 0;
+            AddressBooks.get(bookName);
+            contactlist.stream().filter(value -> value.getCity().equals(city)).map(Contact::getFirstName).forEach(System.out::println);
+            countPerson++;
+            System.out.println("total persons:"+countPerson);
+        }
+    }
+    public void viewPersonByState (String state)
+    {
+        for(String bookName : AddressBooks.keySet())
+        {
+            int countPerson = 0;
+            AddressBooks.get(bookName);
+            contactlist.stream().filter(value -> value.getState().equals(state)).map(Contact::getFirstName).forEach(System.out::println);
+            countPerson++;
+            System.out.println("total persons:"+countPerson);
+        }
+    }
     public void displayList() 
     {
         for (Contact iterator : contactlist) System.out.println(iterator);
